@@ -41,3 +41,8 @@ while ($donnees = $req->fetch())
         <em><a href="comentaires.php?billet=<?php echo $donnees['id']; ?>">Commentaires</a></em>
     </p>
 </div>
+<?php
+    } // Fin de la boucle des billets
+
+$req->closeCursor();
+?>
