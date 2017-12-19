@@ -24,3 +24,17 @@ $req = $bdd->prepare('SELECT id, titre, contenu, DATE_FORMAT(date_creation, \'%d
 $req->execute(array($_GET['billet']));
 $donnees = $req->fetch();
 ?>
+<div class="news">
+    <h3>
+        <?php echo htmlspecialchars($donnees['titre']); ?>
+        <em>le <?php echo $donnees['date_creation_fr']; ?></em>
+    </h3>
+    
+    <p>
+    <?php
+    echo nl2br(htmlspecialchars($donnees['contenu']));
+    ?>
+    </p>
+</div>
+
+<h2>Commentaires</h2>
