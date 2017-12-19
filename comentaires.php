@@ -19,11 +19,13 @@ catch(Exception $e)
 {
         die('Erreur : '.$e->getMessage());
 }
+
 // Récupération du billet
 $req = $bdd->prepare('SELECT id, titre, contenu, DATE_FORMAT(date_creation, \'%d/%m/%Y à %Hh%imin%ss\') AS date_creation_fr FROM tf1 WHERE id = ?');
 $req->execute(array($_GET['billet']));
 $donnees = $req->fetch();
 ?>
+
 <div class="news">
     <h3>
         <?php echo htmlspecialchars($donnees['titre']); ?>
@@ -38,3 +40,22 @@ $donnees = $req->fetch();
 </div>
 
 <h2>Commentaires</h2>
+
+<?php
+$req->closeCursor(); // Important : on libère le curseur pour la prochaine requête
+
+// Récupération des commentaires
+$req = $bdd->prepare('SELECT auteur, commentaires, DATE_FORMAT(date_commentaire, \'%d/%m/%Y à %Hh%imin%ss\') AS date_commentaire_fr FROM commentaires WHERE id_billet = ? ORDER BY date_commentaire');
+$req->execute(array($_GET['billet']));
+
+while ($donnees = $req->fetch())
+{
+?>
+<p><strong><?php echo htmlspecialchars($donnees['auteur']); ?></strong> le <?php echo $donnees['date_commentaire_fr']; ?></p>
+<p><?php echo nl2br(htmlspecialchars($donnees['commentaires'])); ?></p>
+<?php
+} // Fin de la boucle des commentaires
+$req->closeCursor();
+?>
+</body>
+</html>
